@@ -27,7 +27,6 @@ cleanup:
 - /app/lib/pkgconfig
 
 modules:
-
 - shared-modules/linux-audio/libinstpatch.json
 - shared-modules/linux-audio/fluidsynth2.json
 
@@ -37,9 +36,13 @@ modules:
   - "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   sources:
   - type: archive
-    url: https://github.com/coelckers/ZMusic/archive/1.1.8.tar.gz
-    sha256: 73082f661b7b0bb33348d1d186c132deec9132a1613480348a00172b49c9fd68
-
+    url: https://github.com/coelckers/ZMusic/archive/1.1.9.tar.gz
+    sha256: 4bf39917028bbe2f382748b4400a1cbaeb8975157fe404cff53411297d6ac68c
+    x-checker-data:
+        type: html
+        url: https://raw.githubusercontent.com/coelckers/ZMusic/master/CMakeLists.txt
+        version-pattern: (?!\bVERSION\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*){1}
+        url-pattern: (https://github.com/coelckers/ZMusic/archive/$version.tar.gz)
 - name: raze
   buildsystem: cmake-ninja
   config-opts:
@@ -54,6 +57,9 @@ modules:
     url: https://github.com/coelckers/raze.git
     tag: 1.4.1
     commit: c756ce7ef80cf39912e61d71928236146a94f87b
+    x-checker-data:
+      type: git
+      tag-pattern: ^([\d.]+)$
   - type: patch
     path: raze-flatpak-paths.patch
   post-install:
