@@ -41,7 +41,7 @@ modules:
         x-checker-data:
           type: html
           url: https://raw.githubusercontent.com/coelckers/ZMusic/master/CMakeLists.txt
-          version-pattern: (?!\bVERSION\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*){1}
+          version-pattern: (?<!\(VERSION)([\d.]+)$
           url-template: (https://github.com/coelckers/ZMusic/archive/$version.tar.gz)
   - name: raze
     buildsystem: cmake-ninja
