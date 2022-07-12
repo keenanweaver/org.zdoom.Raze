@@ -5,85 +5,85 @@ runtime-version: "21.08"
 command: raze
 
 finish-args:
-- --device=dri
-- --socket=wayland
-- --socket=fallback-x11
-- --socket=x11
-- --share=ipc
-- --share=network
-- --socket=pulseaudio
+  - --device=dri
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=x11
+  - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
 
-# Based on Raze
-# We redirect the original ~/.config/raze
-- --persist=.config/raze
+  # Based on Raze
+  # We redirect the original ~/.config/raze
+  - --persist=.config/raze
 
-# Simpler way of preventing KDE related errors
-- --env=KDE_FULL_SESSION=false
+  # Simpler way of preventing KDE related errors
+  - --env=KDE_FULL_SESSION=false
 
 cleanup:
-- /app/include
-- /app/lib/*.a
-- /app/lib/*.la
-- /app/lib/pkgconfig
+  - /app/include
+  - /app/lib/*.a
+  - /app/lib/*.la
+  - /app/lib/pkgconfig
 
 modules:
-- shared-modules/linux-audio/libinstpatch.json
-- shared-modules/linux-audio/fluidsynth2.json
+  - shared-modules/linux-audio/libinstpatch.json
+  - shared-modules/linux-audio/fluidsynth2.json
 
-- name: zmusic
-  buildsystem: cmake-ninja
-  config-opts:
-  - "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-  sources:
-  - type: archive
-    url: https://github.com/coelckers/ZMusic/archive/1.1.9.tar.gz
-    sha256: 4bf39917028bbe2f382748b4400a1cbaeb8975157fe404cff53411297d6ac68c
-    x-checker-data:
-        type: html
-        url: https://raw.githubusercontent.com/coelckers/ZMusic/master/CMakeLists.txt
-        version-pattern: (?!\bVERSION\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*){1}
-        url-pattern: (https://github.com/coelckers/ZMusic/archive/$version.tar.gz)
-- name: raze
-  buildsystem: cmake-ninja
-  config-opts:
-  - "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-  cleanup:
-  - "/lib/*.a"
-  - "/lib/*.la"
-  - "/lib/pkgconfig"
-  - "/include"
-  sources:
-  - type: git
-    url: https://github.com/coelckers/raze.git
-    tag: 1.4.1
-    commit: c756ce7ef80cf39912e61d71928236146a94f87b
-    x-checker-data:
-      type: git
-      tag-pattern: ^([\d.]+)$
-  - type: patch
-    path: raze-flatpak-paths.patch
-  post-install:
-  - install -Dm 644 soundfont/raze.sf2 /app/share/games/raze/soundfonts/raze.sf2
+  - name: zmusic
+    buildsystem: cmake-ninja
+    config-opts:
+      - "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+    sources:
+      - type: archive
+        url: https://github.com/coelckers/ZMusic/archive/1.1.9.tar.gz
+        sha256: 4bf39917028bbe2f382748b4400a1cbaeb8975157fe404cff53411297d6ac68c
+        x-checker-data:
+          type: html
+          url: https://raw.githubusercontent.com/coelckers/ZMusic/master/CMakeLists.txt
+          version-pattern: (?!\bVERSION\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*){1}
+          url-template: (https://github.com/coelckers/ZMusic/archive/$version.tar.gz)
+  - name: raze
+    buildsystem: cmake-ninja
+    config-opts:
+      - "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+    cleanup:
+      - "/lib/*.a"
+      - "/lib/*.la"
+      - "/lib/pkgconfig"
+      - "/include"
+    sources:
+      - type: git
+        url: https://github.com/coelckers/raze.git
+        tag: 1.4.1
+        commit: c756ce7ef80cf39912e61d71928236146a94f87b
+        x-checker-data:
+          type: git
+          tag-pattern: ^([\d.]+)$
+      - type: patch
+        path: raze-flatpak-paths.patch
+    post-install:
+      - install -Dm 644 soundfont/raze.sf2 /app/share/games/raze/soundfonts/raze.sf2
 
-- name: integration
-  buildsystem: simple
-  sources:
-  - type: file
-    path: org.zdoom.Raze.desktop
-  - type: file
-    path: org.zdoom.Raze.appdata.xml
-  - type: file
-    path: org.zdoom.Raze.32.png
-  - type: file
-    path: org.zdoom.Raze.64.png
-  - type: file
-    path: org.zdoom.Raze.128.png
-  - type: file
-    path: org.zdoom.Raze.256.png
-  build-commands:
-  - install -Dm 644 org.zdoom.Raze.desktop -t /app/share/applications
-  - install -Dm 644 org.zdoom.Raze.appdata.xml -t /app/share/metainfo
-  - install -Dm 644 org.zdoom.Raze.32.png /app/share/icons/hicolor/32x32/apps/org.zdoom.Raze.png
-  - install -Dm 644 org.zdoom.Raze.64.png /app/share/icons/hicolor/64x64/apps/org.zdoom.Raze.png
-  - install -Dm 644 org.zdoom.Raze.128.png /app/share/icons/hicolor/128x128/apps/org.zdoom.Raze.png
-  - install -Dm 644 org.zdoom.Raze.256.png /app/share/icons/hicolor/256x256/apps/org.zdoom.Raze.png
+  - name: integration
+    buildsystem: simple
+    sources:
+      - type: file
+        path: org.zdoom.Raze.desktop
+      - type: file
+        path: org.zdoom.Raze.appdata.xml
+      - type: file
+        path: org.zdoom.Raze.32.png
+      - type: file
+        path: org.zdoom.Raze.64.png
+      - type: file
+        path: org.zdoom.Raze.128.png
+      - type: file
+        path: org.zdoom.Raze.256.png
+    build-commands:
+      - install -Dm 644 org.zdoom.Raze.desktop -t /app/share/applications
+      - install -Dm 644 org.zdoom.Raze.appdata.xml -t /app/share/metainfo
+      - install -Dm 644 org.zdoom.Raze.32.png /app/share/icons/hicolor/32x32/apps/org.zdoom.Raze.png
+      - install -Dm 644 org.zdoom.Raze.64.png /app/share/icons/hicolor/64x64/apps/org.zdoom.Raze.png
+      - install -Dm 644 org.zdoom.Raze.128.png /app/share/icons/hicolor/128x128/apps/org.zdoom.Raze.png
+      - install -Dm 644 org.zdoom.Raze.256.png /app/share/icons/hicolor/256x256/apps/org.zdoom.Raze.png
